@@ -19,21 +19,6 @@ exp.createRouter = function() {
 	return router;
 }
 
-// public function
-/**
- * 
- * 
- * 
- * 
- */
-exp.loadFrom = function(path, callback) {
-	var router = exp.createRouter();
-	
-	
-	
-	return router;
-}
-
 // internal implementation
 // init / configure target router
 function configRouter() {
@@ -104,19 +89,21 @@ function parse(req, res) {
 	console.log('router req method = %s, url = %s ', method, req.url);
 	
 	var tar_method = self.methods[method];
-	if (tar_method) {
-		var urlData = parseURL(req.url, false, true);
-		var pathname = urlData.pathname;
+	
+	var urlData = parseURL(req.url, true, true);
+	var pathname = urlData.pathname;
+	var querystring = urlData.query;
 		
+	if (tar_method) {
 		var cb_ofpath = tar_method[pathname];
 		if (cb_ofpath) {
-			cb_ofpath(req, res, method, pathname);
+			cb_ofpath(req, res, method, pathname, querystring);
 		} else {
 			// no matched paths
-			self.__dispatchUnknown(KEY_ROUTE, req, res, method, pathname);
+			self.__dispatchUnknown(KEY_ROUTE, req, res, method, pathname, querystring);
 		}
 	} else {
 		// no matched methods
-		self.__dispatchUnknown(KEY_METHOD, req, res, method, null);
+		self.__dispatchUnknown(KEY_METHOD, req, res, method, pathname, querystring);
 	}
 }
