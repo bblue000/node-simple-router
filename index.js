@@ -2,4 +2,6 @@
 
 var exp = exports;
 
-exp.SimpleRouter = require('./core/simple-router');
+exp.newSimpleRouter = function () {
+	return require('./core/simple-router').createRouter();
+}
